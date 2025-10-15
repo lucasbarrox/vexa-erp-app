@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vexa ERP - MVP
 
-## Getting Started
+Este é o repositório do projeto **Vexa ERP**, um Progressive Web App (PWA) para gestão de pequenos negócios, com foco inicial em lojas de roupas.
 
-First, run the development server:
+## 🚀 Stack de Tecnologia
 
+* **Framework Full-Stack:** Next.js (App Router)
+* **Linguagem:** TypeScript
+* **Plataforma Backend (BaaS):** Supabase (PostgreSQL, Auth, Storage)
+* **Estilização:** Tailwind CSS
+* **Biblioteca de Componentes:** Shadcn/ui
+* **Gerenciador de Pacotes:** pnpm
+
+## 🛠️ Rodando o Projeto Localmente
+
+Siga os passos abaixo para configurar e rodar o ambiente de desenvolvimento.
+
+### 1. Pré-requisitos
+- Node.js (versão 18 ou superior)
+- pnpm (instalado globalmente: `npm install -g pnpm`)
+
+### 2. Instalação
+Clone o repositório e instale as dependências:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [https://github.com/lucasbarrox/vexa-erp-app.git](https://github.com/lucasbarrox/vexa-erp-app.git)
+cd vexa-erp-app
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Variáveis de Ambiente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Este projeto se conecta a uma instância da **Supabase** para o banco de dados e autenticação.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Crie uma cópia do arquivo de exemplo `.env.example`:
 
-## Learn More
+```bash
+cp .env.example .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Abra o arquivo `.env.local` e preencha as variáveis com as chaves do seu projeto na Supabase (Project Settings > API). 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Rodando o Servidor de Desenvolvimento
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Instale as dependências (se ainda não fez):
 
-## Deploy on Vercel
+```bash
+pnpm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Inicie o servidor local:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm run dev
+```
+
+Abra http://localhost:3000 no seu navegador para ver a aplicação.
+
