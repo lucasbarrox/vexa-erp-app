@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { createServerClient } from '@supabase/ssr';
 import type { Database } from '@/lib/supabase/database.types';
+import DashboardLayout from '@/components/shared/dashboard-layout';
 import { Button } from '@/components/ui/button';
 import ProductsTable from './products-table';
 
@@ -29,14 +30,18 @@ export default async function ProductsPage() {
   }
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Gerenciamento de Produtos</h1>
-        <Button asChild>
-          <Link href="/dashboard/products/new">Novo Produto</Link>
-        </Button>
+    <DashboardLayout
+      title="Gerenciamento de Produtos"
+      description="Gerencie seu catálogo de produtos e variantes"
+    >
+      <div className="p-4 md:p-6">
+        <div className="flex items-center justify-between mb-4">
+          <Button asChild>
+            <Link href="/dashboard/products/new">Novo Produto</Link>
+          </Button>
+        </div>
+        <ProductsTable products={products ?? []} />
       </div>
-      <ProductsTable products={products ?? []} />
-    </div>
+    </DashboardLayout>
   );
 }

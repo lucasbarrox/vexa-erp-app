@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import type { Database } from '@/lib/supabase/database.types';
 
+import DashboardLayout from '@/components/shared/dashboard-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -48,8 +49,12 @@ export default function NewProductPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-lg mx-4">
+    <DashboardLayout
+      title="Cadastrar Novo Produto"
+      description="Preencha os dados abaixo para adicionar um novo produto ao catálogo"
+    >
+      <div className="flex items-center justify-center min-h-screen">
+        <Card className="w-full max-w-lg mx-4">
         <CardHeader>
           <CardTitle className="text-2xl">Cadastrar Novo Produto</CardTitle>
           <CardDescription>
@@ -85,5 +90,6 @@ export default function NewProductPage() {
         </CardContent>
       </Card>
     </div>
+    </DashboardLayout>
   );
 }

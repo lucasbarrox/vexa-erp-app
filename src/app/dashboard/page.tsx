@@ -1,26 +1,23 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase/client';
 import type { User } from '@supabase/supabase-js';
 
-import { Button } from '@/components/ui/button';
+import DashboardLayout from '@/components/shared/dashboard-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   ShoppingCart, 
   Package, 
   Users, 
   BarChart3, 
-  LogOut,
   TrendingUp,
   AlertTriangle
 } from 'lucide-react';
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -31,33 +28,8 @@ export default function DashboardPage() {
     fetchUser();
   }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.refresh();
-    router.push('/login');
-  };
-
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-              <p className="text-slate-600 mt-1">
-                {user ? `Bem-vindo, ${user.email}!` : 'Carregando...'}
-              </p>
-            </div>
-            <Button onClick={handleLogout} variant="outline">
-              <LogOut className="w-4 h-4 mr-2" />
-              Sair
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
+    <DashboardLayout>
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           
@@ -261,6 +233,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

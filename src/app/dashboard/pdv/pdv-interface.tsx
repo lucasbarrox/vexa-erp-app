@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase/client';
 import type { Database } from '@/lib/supabase/database.types';
 
+import DashboardLayout from '@/components/shared/dashboard-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -186,16 +187,10 @@ export default function PDVInterface({ products }: { products: ProductWithVarian
   };
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Ponto de Venda
-        </h1>
-        <p className="text-slate-600">
-          Selecione produtos e realize vendas de forma rápida e eficiente
-        </p>
-      </div>
+    <DashboardLayout
+      title="Ponto de Venda"
+      description="Selecione produtos e realize vendas de forma rápida e eficiente"
+    >
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Área de Busca e Produtos */}
@@ -403,6 +398,6 @@ export default function PDVInterface({ products }: { products: ProductWithVarian
           </Card>
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
