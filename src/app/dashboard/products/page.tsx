@@ -83,8 +83,10 @@ export default async function ProductsPage() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
-                      Editar
+                    <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/products/${product.id}/edit`}>
+                            Editar
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem className="text-red-500">
