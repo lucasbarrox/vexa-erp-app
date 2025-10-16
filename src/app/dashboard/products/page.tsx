@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import type { Database } from '@/lib/supabase/database.types';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 import {
   Table,
@@ -35,7 +37,13 @@ export default async function ProductsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Gerenciamento de Produtos</h1>
+      <div className="p-4 md:p-6"> 
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Gerenciamento de Produtos</h1>
+        <Button asChild>
+          <Link href="/dashboard/products/new">Novo Produto</Link>
+        </Button>
+      </div>
       <Table>
         <TableCaption>Uma lista dos seus produtos cadastrados.</TableCaption>
         <TableHeader>
@@ -60,6 +68,7 @@ export default async function ProductsPage() {
           ))}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 }
