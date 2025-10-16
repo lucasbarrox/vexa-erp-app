@@ -38,6 +38,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { MoreHorizontal, ArrowLeft, Package, Edit, Trash2 } from 'lucide-react';
 
 // Extraímos os tipos do nosso arquivo gerado para facilitar
@@ -49,13 +57,18 @@ type Variant = Database['public']['Tables']['product_variants']['Row'];
 
 export default function VariantManager({ product }: { product: ProductWithVariants }) {
   const router = useRouter();
+  
   // Estados para o formulário de nova variante
   const [size, setSize] = useState('');
   const [color, setColor] = useState('');
   const [quantity, setQuantity] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Estados para as ações de variantes
   const [variantToDelete, setVariantToDelete] = useState<Variant | null>(null);
+  const [variantToEdit, setVariantToEdit] = useState<Variant | null>(null);
+  const [newQuantity, setNewQuantity] = useState(0);
 
   const handleAddVariant = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -82,6 +95,24 @@ export default function VariantManager({ product }: { product: ProductWithVarian
     }
     
     setIsLoading(false);
+  };
+
+  // Função para atualizar o stock
+  const handleUpdateQuantity = async () => {
+    if (!variantToEdit) return;
+    
+    const { error } = await supabase
+      .from('product_variants')
+      .update({ quantity: newQuantity })
+      .eq('id', variantToEdit.id);
+
+    if (error) {
+      setError(`Erro ao atualizar stock: ${error.message}`);
+    } else {
+      setVariantToEdit(null);
+      setNewQuantity(0);
+      router.refresh();
+    }
   };
 
   const handleDeleteVariant = async () => {
@@ -226,7 +257,7 @@ export default function VariantManager({ product }: { product: ProductWithVarian
                 <TableRow>
                   <TableHead>Tamanho</TableHead>
                   <TableHead>Cor</TableHead>
-                  <TableHead>Quantidade</TableHead>
+                  <TableHead>Quantidade em Estoque</TableHead>
                   <TableHead className="text-right">Ações</TableHead>
                 </TableRow>
               </TableHeader>
@@ -256,13 +287,22 @@ export default function VariantManager({ product }: { product: ProductWithVarian
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                          <DropdownMenuItem 
+                            onSelect={(e) => {
+                              e.preventDefault();
+                              setNewQuantity(variant.quantity || 0);
+                              setVariantToEdit(variant);
+                            }}
+                          >
+                            Ajustar Stock
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             className="text-red-500"
                             onSelect={() => setVariantToDelete(variant)}
                           >
                             <Trash2 className="w-4 h-4 mr-2" />
-                            Excluir
+                            Excluir Variante
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -283,22 +323,55 @@ export default function VariantManager({ product }: { product: ProductWithVarian
         </CardContent>
       </Card>
 
+      {/* Dialog de Ajuste de Stock */}
+      <Dialog open={!!variantToEdit} onOpenChange={() => setVariantToEdit(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Ajustar Stock</DialogTitle>
+            <DialogDescription>
+              Ajuste a quantidade em stock para a variante{' '}
+              <span className="font-bold">
+                {variantToEdit?.size} / {variantToEdit?.color}
+              </span>.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <Label htmlFor="newQuantity">Nova Quantidade</Label>
+            <Input
+              id="newQuantity"
+              type="number"
+              min="0"
+              value={newQuantity}
+              onChange={(e) => setNewQuantity(parseInt(e.target.value, 10) || 0)}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setVariantToEdit(null)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleUpdateQuantity}>
+              Salvar Alteração
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Modal de Confirmação de Exclusão */}
       <AlertDialog open={!!variantToDelete} onOpenChange={() => setVariantToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir Variante</AlertDialogTitle>
+            <AlertDialogTitle>Você tem a certeza absoluta?</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir a variante <span className="font-bold">
-                {variantToDelete?.size} - {variantToDelete?.color}
-              </span>?
-              Esta ação não pode ser desfeita.
+              Isto irá apagar permanentemente a variante{' '}
+              <span className="font-bold">
+                {variantToDelete?.size} / {variantToDelete?.color}
+              </span>.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteVariant} className="bg-red-500 hover:bg-red-600">
-              Excluir
+            <AlertDialogAction onClick={handleDeleteVariant} className="bg-red-600 hover:bg-red-700">
+              Sim, excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
