@@ -25,7 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, Eye, Edit, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import {
   AlertDialog,
@@ -95,13 +95,23 @@ export default function ProductsTable({ products }: { products: Product[] }) {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Ações</DropdownMenuLabel>
                     <DropdownMenuItem asChild>
-                      <Link href={`/dashboard/products/${product.id}/edit`}>Editar</Link>
+                      <Link href={`/dashboard/products/${product.id}`} className="flex items-center">
+                        <Eye className="w-4 h-4 mr-2" />
+                        Ver Detalhes
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/dashboard/products/${product.id}/edit`} className="flex items-center">
+                        <Edit className="w-4 h-4 mr-2" />
+                        Editar
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       className="text-red-500"
                       onSelect={() => setProductToDelete(product)}
                     >
+                      <Trash2 className="w-4 h-4 mr-2" />
                       Excluir
                     </DropdownMenuItem>
                   </DropdownMenuContent>
